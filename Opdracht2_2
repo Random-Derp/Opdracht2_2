@@ -1,11 +1,17 @@
+atomweight_dict={'C':12.01,'N':14.01,'O':16.00,'S':32.06}
+
+
 def opener():
     with open('./5uak.pdb','r') as file:
         list_lines=list(file.readlines())
     return list_lines
 def formatter(list_lines):
+    atomweight = float()
     for lines in list_lines:
         if lines.startswith('ATOM'):
-            print(lines)
+            atom = lines[77:78]
+            atomweight += (atomweight_dict[atom])
+    print(atomweight)
 def main():
     list_lines=opener()
     formatter(list_lines)
