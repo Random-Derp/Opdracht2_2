@@ -3,7 +3,10 @@ amino_acids_dict = {'CYS':'C','ASP':'D','SER':'S','GLN':'Q','LYS':'K',
     'ILE':'I','PRO':'P','THR':'T','PHE':'F','ASN':'N','GLY':'G','HIS':'H',
     'LEU':'L','ARG':'R','TRP':'W','ALA':'A','VAL':'V','GLU':'E','TYR':'Y',
     'MET':'M','UNK':'*'}
-
+amino_acid_weight_dict = {'A': 71.04, 'C': 103.01, 'D': 115.03, 'E': 129.04, 'F': 147.07,
+           'G': 57.02, 'H': 137.06, 'I': 113.08, 'K': 128.09, 'L': 113.08, 'M': 131.04,
+           'N': 114.04, 'P': 97.05, 'Q': 128.06, 'R': 156.10, 'S': 87.03, 'T': 101.05,
+           'V': 99.07, 'W': 186.08, 'Y': 163.06, '*': 110 }
 def opener():
     with open('./5uak.pdb','r') as file:
         list_lines=list(file.readlines())
@@ -19,11 +22,14 @@ def formatter_atom(list_lines):
 
 def formatter_amino_acids(list_lines):
     short_amino_acids = ''
+    amino_acids_weight = float()
     for lines in list_lines:
         if lines.startswith('SEQRES'):
             amino_acids=(lines[19:len(lines)])
             for amino_acid in amino_acids.split():
                 short_amino_acids += (amino_acids_dict[amino_acid])
+                amino_acids_weight += amino_acid_weight_dict[amino_acids_dict[amino_acid]]
+    print(amino_acids_weight)
     return short_amino_acids
 
 def main():
