@@ -1,1 +1,12 @@
-
+def opener():
+    with open('./5uak.pdb','r') as file:
+        list_lines=list(file.readlines())
+    return list_lines
+def formatter(list_lines):
+    for lines in list_lines:
+        if lines.startswith('ATOM'):
+            print(lines)
+def main():
+    list_lines=opener()
+    formatter(list_lines)
+main()
