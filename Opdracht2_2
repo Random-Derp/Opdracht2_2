@@ -42,7 +42,7 @@ def helix_finder(list_lines):
 def sheet_finder(list_lines):
     for lines in list_lines:
         if lines.startswith('SHEET'):
-            for sheet_amino_acids in range(int(lines[22:27].strip()),int(lines[33:38].strip())):
+            for sheet_amino_acids in range(int(lines[22:27].strip()),int(lines[33:38].strip())+1):
                 print(sheet_amino_acids)
 
 def main():
