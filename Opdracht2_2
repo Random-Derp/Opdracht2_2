@@ -8,7 +8,7 @@ amino_acid_weight_dict = {'A': 71.04, 'C': 103.01, 'D': 115.03, 'E': 129.04, 'F'
            'N': 114.04, 'P': 97.05, 'Q': 128.06, 'R': 156.10, 'S': 87.03, 'T': 101.05,
            'V': 99.07, 'W': 186.08, 'Y': 163.06, '*': 110 }
 def opener():
-    with open('./5uak.pdb','r') as file:
+    with open('/workspace/Opdracht2_2/5UAK.pdb','r') as file:
         list_lines=list(file.readlines())
     return list_lines
 
@@ -18,7 +18,7 @@ def formatter_atom(list_lines):
         if lines.startswith('ATOM'):
             atom = lines[77:78]
             atomweight += (atomweight_dict[atom])
-    print(atomweight)
+    print('atomweight =',atomweight)
 
 def formatter_amino_acids(list_lines):
     short_amino_acids = ''
@@ -29,11 +29,26 @@ def formatter_amino_acids(list_lines):
             for amino_acid in amino_acids.split():
                 short_amino_acids += (amino_acids_dict[amino_acid])
                 amino_acids_weight += amino_acid_weight_dict[amino_acids_dict[amino_acid]]
-    print(amino_acids_weight)
+    print('amino acids weigth =',amino_acids_weight)
     return short_amino_acids
+
+def helix_finder(list_lines):
+    for lines in list_lines:
+        if lines.startswith('HELIX'):
+            for helix_amino_acids in range(int(lines[21:26].strip()),int(lines[33:38].strip())+1):
+                print(helix_amino_acids)
+    print('\n')
+
+def sheet_finder(list_lines):
+    for lines in list_lines:
+        if lines.startswith('SHEET'):
+            for sheet_amino_acids in range(int(lines[22:27].strip()),int(lines[33:38].strip())):
+                print(sheet_amino_acids)
 
 def main():
     list_lines=opener()
     formatter_atom(list_lines)
     short_amino_acids=formatter_amino_acids(list_lines)
+    helix_finder(list_lines)
+    sheet_finder(list_lines)
 main()
