@@ -1,54 +1,118 @@
-atomweight_dict={'C':12.01,'N':14.01,'O':16.00,'S':32.06,'H':1.008}
-amino_acids_dict = {'CYS':'C','ASP':'D','SER':'S','GLN':'Q','LYS':'K',
-    'ILE':'I','PRO':'P','THR':'T','PHE':'F','ASN':'N','GLY':'G','HIS':'H',
-    'LEU':'L','ARG':'R','TRP':'W','ALA':'A','VAL':'V','GLU':'E','TYR':'Y',
-    'MET':'M','UNK':'*'}
+"""
+Script_2_2
+Author: Cheyenne Brouwer
+Date: 20-10-2022
+Version: 1
+"""
+import sys
+
+atomweight_dict = {"C":12.01,"N":14.01,"O":16.00,"S":32.06,"H":1.008}
+amino_acids_dict = {"CYS":"C","ASP":"D","SER":"S","GLN":"Q","LYS":"K",
+                    "ILE":"I","PRO":"P","THR":"T","PHE":"F","ASN":"N",
+                    "GLY":"G","HIS":"H", "LEU":"L","ARG":"R","TRP":"W",
+                    "ALA":"A","VAL":"V","GLU":"E","TYR":"Y", "MET":"M",
+                    "UNK":""}
 amino_acid_weight_dict = {'A': 71.04, 'C': 103.01, 'D': 115.03, 'E': 129.04, 'F': 147.07,
            'G': 57.02, 'H': 137.06, 'I': 113.08, 'K': 128.09, 'L': 113.08, 'M': 131.04,
            'N': 114.04, 'P': 97.05, 'Q': 128.06, 'R': 156.10, 'S': 87.03, 'T': 101.05,
-           'V': 99.07, 'W': 186.08, 'Y': 163.06, '*': 110 }
-def opener():
-    with open('/workspace/Opdracht2_2/5UAK.pdb','r') as file:
-        list_lines=list(file.readlines())
+           'V': 99.07, 'W': 186.08, 'Y': 163.06, '': 110 }
+
+
+def read_file():
+    """
+    hehehehe
+    """
+    with open('5uak.pdb', "r") as cftr_file:
+        list_lines = list(cftr_file.readlines())
     return list_lines
 
-def formatter_atom(list_lines):
-    atomweight = float()
+
+def calc_atom_weight(list_lines):
+    atomweight = 0
     for lines in list_lines:
         if lines.startswith('ATOM'):
             atom = lines[77:78]
             atomweight += (atomweight_dict[atom])
-    print('atomweight =',atomweight)
+    return atomweight
 
-def formatter_amino_acids(list_lines):
+
+def calc_amino_weight(list_lines):
     short_amino_acids = ''
-    amino_acids_weight = float()
+    amino_acids_weight = 0
+    seq_amino = []
     for lines in list_lines:
         if lines.startswith('SEQRES'):
-            amino_acids=(lines[19:len(lines)])
+            amino_acids = (lines[19:len(lines)])
             for amino_acid in amino_acids.split():
-                short_amino_acids += (amino_acids_dict[amino_acid])
-                amino_acids_weight += amino_acid_weight_dict[amino_acids_dict[amino_acid]]
-    print('amino acids weigth =',amino_acids_weight)
-    return short_amino_acids
+                seq_amino.append(amino_acid)
+                short_amino_acids += amino_acids_dict[amino_acid]
+                if amino_acid != 'UNK':
+                    amino_acids_weight += amino_acid_weight_dict[amino_acids_dict[amino_acid]]
+    return short_amino_acids, seq_amino, amino_acids_weight
 
-def helix_finder(list_lines):
+
+def make_helix_seq(list_lines, seq_amino):
+    seq_helix = ""
     for lines in list_lines:
         if lines.startswith('HELIX'):
-            for helix_amino_acids in range(int(lines[21:26].strip()),int(lines[33:38].strip())+1):
-                print(helix_amino_acids)
-    print('\n')
+            for helix_amino_acids in range(int(lines[21:26].strip()), int(lines[33:38].strip())+1):
+                seq_helix += seq_amino[helix_amino_acids]
+                seq_helix += ' '
+    return seq_helix
 
-def sheet_finder(list_lines):
+
+def make_sheet_seq(list_lines, seq_amino):
+    seq_sheet = ""
     for lines in list_lines:
         if lines.startswith('SHEET'):
-            for sheet_amino_acids in range(int(lines[22:27].strip()),int(lines[33:38].strip())+1):
-                print(sheet_amino_acids)
+            for sheet_amino_acids in range(int(lines[22:27].strip()), int(lines[33:38].strip())+1):
+                seq_sheet += seq_amino[sheet_amino_acids]
+                seq_sheet += ' '
+    return seq_sheet
+
+
+def read_ncbi_file():
+    ncbi = ""
+    with open('ncbi_file (1).fasta', 'r') as file:
+        for line in file:
+            if not line.startswith('>'):
+                line = line.strip()
+                ncbi += line
+    return ncbi
+
+
+def func_1(pdb, ncbi):
+    smallest = len(min(pdb, ncbi))
+    dif = ''
+
+    # loop over the smalles sequence
+    for position in range(0, smallest):
+        # compare aminos from both sequences for this position
+        if pdb[position] != ncbi[position]:  # amino's are not equal, add * symbol
+            dif += "*"
+        else:  # amino's are equal add | symbol
+            dif += "|"
+    return dif
+
 
 def main():
-    list_lines=opener()
-    formatter_atom(list_lines)
-    short_amino_acids=formatter_amino_acids(list_lines)
-    helix_finder(list_lines)
-    sheet_finder(list_lines)
+    list_lines = read_file()
+
+    atomweight = calc_atom_weight(list_lines)
+    print('The total atom-weight of this pdb file is:', atomweight,'\n')
+
+    short_amino_acids, seq_amino, amino_acids_weight = calc_amino_weight(list_lines)
+    print('The total amino acids weight is:', amino_acids_weight,'\n')
+
+    seq_helix = make_helix_seq(list_lines, seq_amino)
+    print("The helix sequence is: ", seq_helix,'\n')
+    seq_sheet = make_sheet_seq(list_lines, seq_amino)
+    print("The sheet sequence is: ", seq_sheet,'\n')
+
+    ncbi = read_ncbi_file()
+    diff = func_1(short_amino_acids, ncbi)
+    print(short_amino_acids)
+    print(diff)
+    print(ncbi)
+
 main()
