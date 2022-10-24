@@ -22,7 +22,8 @@ def read_file():
     """
     
     """
-    with open('5uak.pdb', "r") as cftr_file:
+    uak_pdb = sys.argv[1]
+    with open(uak_pdb, "r") as cftr_file:
         list_lines = list(cftr_file.readlines())
     return list_lines
 
@@ -139,3 +140,6 @@ def main():
     print(ncbi)
 
 main()
+
+
+#python3 Opdracht2_2_Cheyenne.py 5uak.pdb
