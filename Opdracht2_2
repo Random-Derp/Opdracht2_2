@@ -1,6 +1,6 @@
 """
 Script_2_2
-Author: Cheyenne Brouwer
+Authors: Cheyenne Brouwer and Bram Koobs
 Date: 20-10-2022
 Version: 1
 """
@@ -20,7 +20,8 @@ amino_acid_weight_dict = {'A': 71.04, 'C': 103.01, 'D': 115.03, 'E': 129.04, 'F'
 
 def read_file():
     """
-    
+    makes a variable with the name 'list_lines' from all lines from whithin a mentioned file.
+    returns/outputs 'list_lines'.
     """
     uak_pdb = sys.argv[1]
     with open(uak_pdb, "r") as cftr_file:
@@ -30,7 +31,8 @@ def read_file():
 
 def calc_atom_weight(list_lines):
     """
-
+    Looks for lines that start with 'ATOM' and it then looks up the weight corresponding to the atom in the line. The weight is added up and saved as 'atomweight'.
+    returns/outputs 'atomweight'.
     """
     atomweight = 0
     for lines in list_lines:
@@ -42,7 +44,9 @@ def calc_atom_weight(list_lines):
 
 def calc_amino_weight(list_lines):
     """
-
+    Shortens the amino acids from the 3 letter abbreviation, to the 1 letter abbreviation, the 1 letter abbreviations are put in the string variable: 'short_amino_acids'
+    It then looks up the weight of each amino acid from 'amino_acid_weight_dict', and are stored in 'amino_acids_weight'.
+    returns/outputs 'short_amino_acids', 'amino_acids_weight' and a variable 'seq_amino' containing all amino acids from the lines starting with 'SEQRES'.
     """
     short_amino_acids = ''
     amino_acids_weight = 0
@@ -60,7 +64,8 @@ def calc_amino_weight(list_lines):
 
 def make_helix_seq(list_lines, seq_amino):
     """
-
+    Looks for lines that start with 'HELIX' and stores the location off all amino acids mentioned in the lines that start with 'HELIX' in a variable 'seq_helix'.
+    returns/outputs seq_helix
     """
     seq_helix = ""
     for lines in list_lines:
@@ -73,7 +78,8 @@ def make_helix_seq(list_lines, seq_amino):
 
 def make_sheet_seq(list_lines, seq_amino):
     """
-    
+    Looks for lines that start with 'SHEET' and stores the location off all amino acids mentioned in the lines that start with 'SHEET' in a variable 'seq_sheet'.
+    returns/outputs 'seq_sheet'.
     """
     seq_sheet = ""
     for lines in list_lines:
@@ -85,8 +91,9 @@ def make_sheet_seq(list_lines, seq_amino):
 
 
 def read_ncbi_file():
-    """"
-    
+    """
+    Opens a fasta file, and stores it in variable 'ncbi' without the header.
+    returns/outputs 'ncbi'
     """
     ncbi = ""
     with open('ncbi_file (1).fasta', 'r') as file:
@@ -98,8 +105,9 @@ def read_ncbi_file():
 
 
 def func_1(pdb, ncbi):
-    """"
-    
+    """
+    Looks for the difference between the pdb file and a fasta file, and stores the difference in 'diff'
+    returns/outputs 'diff'
     """
     smallest = len(min(pdb, ncbi))
     dif = ''
@@ -118,7 +126,8 @@ def func_1(pdb, ncbi):
 
 def main():
     """
-    
+    Executes all functions one by one.
+    Prints the created 1 letter amino acids abbreviations from the pdb file called 'short_amino_acids', then the variable 'diff' and finally the variable 'ncbi'.
     """
     list_lines = read_file()
 
