@@ -20,7 +20,7 @@ amino_acid_weight_dict = {'A': 71.04, 'C': 103.01, 'D': 115.03, 'E': 129.04, 'F'
 
 def read_file():
     """
-    hehehehe
+    
     """
     with open('5uak.pdb', "r") as cftr_file:
         list_lines = list(cftr_file.readlines())
@@ -28,6 +28,9 @@ def read_file():
 
 
 def calc_atom_weight(list_lines):
+    """
+
+    """
     atomweight = 0
     for lines in list_lines:
         if lines.startswith('ATOM'):
@@ -37,6 +40,9 @@ def calc_atom_weight(list_lines):
 
 
 def calc_amino_weight(list_lines):
+    """
+
+    """
     short_amino_acids = ''
     amino_acids_weight = 0
     seq_amino = []
@@ -52,6 +58,9 @@ def calc_amino_weight(list_lines):
 
 
 def make_helix_seq(list_lines, seq_amino):
+    """
+
+    """
     seq_helix = ""
     for lines in list_lines:
         if lines.startswith('HELIX'):
@@ -62,6 +71,9 @@ def make_helix_seq(list_lines, seq_amino):
 
 
 def make_sheet_seq(list_lines, seq_amino):
+    """
+    
+    """
     seq_sheet = ""
     for lines in list_lines:
         if lines.startswith('SHEET'):
@@ -72,6 +84,9 @@ def make_sheet_seq(list_lines, seq_amino):
 
 
 def read_ncbi_file():
+    """"
+    
+    """
     ncbi = ""
     with open('ncbi_file (1).fasta', 'r') as file:
         for line in file:
@@ -82,6 +97,9 @@ def read_ncbi_file():
 
 
 def func_1(pdb, ncbi):
+    """"
+    
+    """
     smallest = len(min(pdb, ncbi))
     dif = ''
 
@@ -92,10 +110,15 @@ def func_1(pdb, ncbi):
             dif += "*"
         else:  # amino's are equal add | symbol
             dif += "|"
+
+
     return dif
 
 
 def main():
+    """
+    
+    """
     list_lines = read_file()
 
     atomweight = calc_atom_weight(list_lines)
